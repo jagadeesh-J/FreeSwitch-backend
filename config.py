@@ -1,0 +1,5 @@
+default_xml = "/etc/freeswitch/dialplan/default.xml"
+xmls_path = "/etc/freeswitch/directory/default/"
+venv= "/home/freeswitch/Documents/venv/bin"
+vars_xml = "/etc/freeswitch/vars.xml"
+get_xml = "http://192.168.1.186:5000/getxml"
