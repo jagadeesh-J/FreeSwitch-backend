@@ -1,7 +1,8 @@
-from flask import Flask,jsonify,make_response,Response,request
+from flask import Flask,jsonify,make_response,Response,request, render_template,send_from_directory
 import xml.etree.cElementTree as etree
 import config
 import os
+from flask_cors import CORS
 import fileinput
 import subprocess
 from subprocess import call
@@ -15,14 +16,14 @@ from flask_jwt_extended import (
 )
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="build", template_folder="build")
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
-
+CORS(app)
 
 # Enable blacklisting and specify what kind of tokens to check
 # against the blacklist
 app.config['JWT_SECRET_KEY'] = "Mobigesture"  # Change this!
-app.config['JWT_BLACKLIST_ENABLED'] = True
+#app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 jwt = JWTManager(app)
 blacklist = set()
@@ -54,11 +55,12 @@ def login():
     }
     return jsonify(ret), 200
 
-
+'''
 @app.route('/')
-@jwt_required
+#@jwt_required
 def home():
-   return '''<h1>Hello from Mobigesture</h1>'''
+   #return send_from_directory(app.static_folder, 'index.html')
+   return render_template('index.html')'''
 
 
 @app.route('/getxml',methods=['GET',"POST"])
@@ -144,4 +146,4 @@ def render_xmls():
 
 
 if __name__ == "__main__":
-    app.run(host="192.168.1.186",port=5000,debug=True)
+    app.run(host="0.0.0.0",use_reloader=True,threaded=True,port=5000,debug=True)
